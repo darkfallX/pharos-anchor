@@ -2,6 +2,8 @@
 
 The savings account for people and AI agents on Pharos testnet.
 
+Live demo: https://pharos-anchor.onrender.com/app
+
 You talk to Anchor in plain words. You say "save 20" and it puts faucet test dollars into a Pharos vault that mirrors a real-world-asset yield strategy. You can check your savings, add more, round up spare change, or take money out, all through ordinary sentences. No forms, no wallet addresses to copy, no DeFi knowledge needed.
 
 And it is not just for people. Any AI agent can use Anchor as its treasury: park idle testnet funds into the RWA-yield mirror between tasks, recall them the moment the next task needs funds. One POST to park, one to recall, every position onchain and publicly verifiable per agent id.

@@ -10,6 +10,7 @@ Pharos AI Agent Carnival, Round 2. Anchor as a Service Agent on Anvita Flow.
 ## Before July 8
 - [x] Working agent, deployed and tested on testnet
 - [x] Chat demo at `/app`
+- [x] Render live demo: https://pharos-anchor.onrender.com/app
 - [x] SKILL.md and agent-card.json ready
 - [ ] Push the repo to GitHub (https://github.com/darkfallX/pharos-anchor)
 - [ ] Record the demo video (chat, a real save, the onchain receipt, the balance growing)

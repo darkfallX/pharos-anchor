@@ -272,7 +272,6 @@ async function dispatch(intent) {
 }
 
 function appHandler(_req, res) {
-  if (process.env.VERCEL) return res.redirect(302, '/anchor.html');
   res.sendFile(path.join(__dirname, '../../public/anchor.html'), (err) => {
     if (err) res.status(404).json({ error: 'Anchor app not built yet' });
   });

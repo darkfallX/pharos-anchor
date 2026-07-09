@@ -390,18 +390,32 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 18px;
+    align-items: start;
   }
   .card {
     position: relative;
-    min-height: 420px;
+    min-height: 0;
     border-radius: 36px;
-    padding: 30px;
+    padding: clamp(26px, 3vw, 34px);
     overflow: hidden;
     border: 1px solid rgba(15,23,42,.08);
     box-shadow: var(--shadow);
     transform-style: preserve-3d;
     isolation: isolate;
     will-change: transform;
+  }
+  .card.visual-card { min-height: clamp(330px, 32vw, 410px); }
+  .card.liquidity-card {
+    min-height: clamp(300px, 28vw, 380px);
+    padding-bottom: 104px;
+  }
+  .card.text-card {
+    min-height: auto;
+    padding-block: clamp(28px, 4vw, 42px);
+  }
+  .card.receipt-card {
+    min-height: auto;
+    padding-block: clamp(32px, 4vw, 48px);
   }
   .card h3 {
     margin: 0;
@@ -415,6 +429,7 @@
     color: var(--soft);
     line-height: 1.7;
     max-width: 430px;
+    margin-bottom: 0;
     position: relative;
     z-index: 2;
   }
@@ -778,6 +793,8 @@
     .coin.c3 { --x: 40vw; --y: 54%; }
     .section-pad, .live { padding: 82px 0; }
     .card, .use-card, .live-panel { border-radius: 28px; }
+    .card.visual-card, .card.liquidity-card { min-height: 300px; }
+    .card.text-card, .card.receipt-card { min-height: 0; }
     .metrics, .quick { grid-template-columns: 1fr; }
     .live-value { font-size: clamp(54px, 18vw, 84px); }
   }
@@ -843,27 +860,27 @@
       </div>
 
       <div class="bento">
-        <article class="card wide tilt" data-reveal>
+        <article class="card wide visual-card tilt" data-reveal>
           <h3>Capital that grows</h3>
           <p>Save faucet aUSD into an onchain vault that accrues a pAlpha style yield mirror and returns an explorer receipt for every movement.</p>
           <div class="flower" aria-hidden="true">
             <span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span>
           </div>
         </article>
-        <article class="card dark-card tilt" data-reveal>
+        <article class="card dark-card liquidity-card tilt" data-reveal>
           <h3>Always liquid, always legible</h3>
           <p>Withdraw, inspect, and verify positions without making users think in wallet addresses.</p>
           <div class="liquidity"><div class="bar"><span style="--w:88%"></span></div><div class="bar"><span style="--w:64%"></span></div><div class="bar"><span style="--w:76%"></span></div></div>
         </article>
-        <article class="card dark-card tilt" data-reveal>
+        <article class="card dark-card text-card tilt" data-reveal>
           <h3>Agent treasury mode</h3>
           <p>Any AI agent can park idle testnet balances, recall on demand, and expose its treasury onchain by agent id.</p>
         </article>
-        <article class="card tilt" data-reveal style="background:#fff">
+        <article class="card text-card tilt" data-reveal style="background:#fff">
           <h3>100% hands free</h3>
           <p>Round-ups, goals, projections, and daily checks are all one sentence away.</p>
         </article>
-        <article class="card wide tilt" data-reveal style="background:linear-gradient(135deg,#fff,#f1efff)">
+        <article class="card wide receipt-card tilt" data-reveal style="background:linear-gradient(135deg,#fff,#f1efff)">
           <h3>Receipts, not promises</h3>
           <p>Anchor's demo is honest: testnet value, simulated yield mirror, verifiable receipts, and mainnet ready architecture when live RWA integrations arrive.</p>
         </article>

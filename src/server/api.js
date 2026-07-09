@@ -90,18 +90,14 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: err.message || 'Internal server error' });
 });
 
-const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === __filename;
-
-if (isDirectRun) {
-  app.listen(PORT, HOST, () => {
-    const meta = getChainMeta();
-    console.log('Pharos Anchor, savings agent');
-    console.log(`  Network:  ${meta.name} (${meta.chainId})`);
-    console.log(`  Listen:   http://${HOST}:${PORT}`);
-    console.log(`  App:      http://127.0.0.1:${PORT}/app`);
-    console.log(`  Deployed: ${chain.isDeployed()}`);
-    console.log(`  Wallet:   ${chain.hasWallet() ? 'set' : 'missing (set PRIVATE_KEY to enable saving)'}`);
-  });
-}
+app.listen(PORT, HOST, () => {
+  const meta = getChainMeta();
+  console.log('Pharos Anchor, savings agent');
+  console.log(`  Network:  ${meta.name} (${meta.chainId})`);
+  console.log(`  Listen:   http://${HOST}:${PORT}`);
+  console.log(`  App:      http://127.0.0.1:${PORT}/app`);
+  console.log(`  Deployed: ${chain.isDeployed()}`);
+  console.log(`  Wallet:   ${chain.hasWallet() ? 'set' : 'missing (set PRIVATE_KEY to enable saving)'}`);
+});
 
 export default app;
