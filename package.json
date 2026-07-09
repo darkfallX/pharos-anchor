@@ -1,0 +1,44 @@
+{
+  "name": "pharos-anchor",
+  "version": "1.0.0",
+  "description": "Anchor: a savings agent for the Pharos AI economy. Tell it in plain English to save, and it puts your money into real-world-asset yield on Pharos.",
+  "main": "src/server/api.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server/api.js",
+    "compile": "node deploy/compile.js",
+    "deploy": "node deploy/deploy.js",
+    "deploy:agents": "node deploy/deploy-agents.js",
+    "demo:agents": "node scripts/agent-demo.js",
+    "mcp": "node mcp/server.js",
+    "test": "node test/anchor.test.js"
+  },
+  "keywords": [
+    "pharos",
+    "rwa",
+    "savings",
+    "yield",
+    "usdc",
+    "ai-agent",
+    "anvita",
+    "service-agent",
+    "x402"
+  ],
+  "author": "Praise Ezekwe (darkfallX)",
+  "license": "MIT-0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/darkfallX/pharos-anchor.git"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "solc": "^0.8.24"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

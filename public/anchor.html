@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Anchor: Where Money Grows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<style>
+  :root {
+    --paper: #f8f9fa;
+    --white: #ffffff;
+    --ink: #0f172a;
+    --soft: #647084;
+    --muted: #9aa3b2;
+    --obsidian: #0b0a10;
+    --plum: #2e1065;
+    --lav: #8b5cf6;
+    --violet: #a78bfa;
+    --lilac: #ede9fe;
+    --line: rgba(15, 23, 42, 0.08);
+    --dark-line: rgba(255, 255, 255, 0.1);
+    --shadow: 0 34px 90px rgba(46, 16, 101, 0.15);
+    --mx: .5;
+    --my: .5;
+    --scroll: 0;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: auto; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  button, input { font: inherit; }
+  button { cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+  svg { width: 18px; height: 18px; flex: none; }
+  .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .scroll-rail {
+    position: fixed;
+    top: 22vh;
+    right: clamp(12px, 2vw, 28px);
+    width: 5px;
+    height: 56vh;
+    z-index: 90;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, .08);
+    pointer-events: none;
+    overflow: visible;
+  }
+  .scroll-rail::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: calc(var(--scroll) * 100%);
+    border-radius: inherit;
+    background: linear-gradient(180deg, var(--lav), #38bd85);
+    box-shadow: 0 0 22px rgba(139, 92, 246, .34);
+  }
+  .scroll-rail::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: calc(var(--scroll) * 100%);
+    width: 13px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--lav);
+    box-shadow: 0 10px 28px rgba(46, 16, 101, .22);
+    transform: translate(-50%, -50%);
+  }
+
+  .nav-shell {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 18px;
+    z-index: 80;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .nav {
+    pointer-events: auto;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    border: 1px solid rgba(15, 23, 42, .06);
+    background: rgba(255, 255, 255, .78);
+    backdrop-filter: blur(18px);
+    border-radius: 999px;
+    padding: 7px 8px 7px 16px;
+    box-shadow: 0 20px 55px rgba(46, 16, 101, .12);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 25%, #fff, #ddd6fe 35%, var(--lav));
+    position: relative;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.72), 0 8px 22px rgba(139,92,246,.28);
+  }
+  .brand-mark::after {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border-radius: 50%;
+    background: var(--obsidian);
+  }
+  .nav-links { display: flex; gap: 22px; align-items: center; }
+  .nav-links a {
+    color: #495266;
+    font-weight: 700;
+    font-size: 13px;
+    position: relative;
+    white-space: nowrap;
+  }
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -7px;
+    height: 2px;
+    background: var(--lav);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .25s ease;
+  }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  .btn {
+    min-height: 42px;
+    border: 0;
+    border-radius: 999px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--ink);
+    background: #fff;
+    box-shadow: inset 0 0 0 1px rgba(15,23,42,.08);
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    will-change: transform;
+  }
+  .btn:hover { transform: translateY(-2px) scale(1.015); box-shadow: 0 18px 40px rgba(46,16,101,.14), inset 0 0 0 1px rgba(139,92,246,.2); }
+  .btn.dark {
+    color: #fff;
+    background: var(--obsidian);
+    box-shadow: inset 0 0 18px rgba(167,139,250,.18), 0 12px 30px rgba(11,10,16,.18);
+  }
+  .btn.violet {
+    color: #fff;
+    background: linear-gradient(135deg, var(--lav), var(--violet));
+    box-shadow: 0 18px 42px rgba(139,92,246,.32);
+  }
+  .btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+  .hero {
+    min-height: 100vh;
+    padding: 132px 0 58px;
+    display: grid;
+    align-items: end;
+  }
+  .hero-copy {
+    text-align: center;
+    width: min(900px, calc(100% - 32px));
+    margin: 0 auto 38px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 34px;
+    border: 1px solid rgba(139,92,246,.16);
+    border-radius: 999px;
+    padding: 0 13px;
+    background: rgba(139,92,246,.08);
+    color: var(--lav);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    margin: 20px 0 0;
+    font-size: clamp(54px, 9vw, 128px);
+    line-height: .92;
+    letter-spacing: -0.055em;
+    font-weight: 800;
+  }
+  .hero h1 span {
+    color: transparent;
+    background: linear-gradient(120deg, var(--lav), var(--plum));
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .hero p {
+    margin: 24px auto 0;
+    max-width: 640px;
+    color: var(--soft);
+    font-size: clamp(16px, 1.8vw, 20px);
+    line-height: 1.7;
+  }
+  .hero-actions {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hero-visual {
+    width: min(1280px, calc(100% - 36px));
+    height: min(620px, 58vh);
+    min-height: 430px;
+    margin: 0 auto;
+    position: relative;
+    border-radius: clamp(32px, 5vw, 58px);
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 80%, rgba(139,92,246,.42), transparent 44%),
+      linear-gradient(150deg, #151025, #0b0a10 58%, #1d123a);
+    border: 1px solid rgba(46,16,101,.16);
+    box-shadow: 0 46px 120px rgba(46,16,101,.24);
+    transform-origin: center top;
+    will-change: transform;
+  }
+  #gardenCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .scene-glass {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(255,255,255,.08), transparent 30%, rgba(11,10,16,.2)),
+      radial-gradient(circle at calc(var(--mx) * 100%) calc(var(--my) * 100%), rgba(167,139,250,.22), transparent 28%);
+    pointer-events: none;
+  }
+  .coin {
+    position: absolute;
+    width: clamp(56px, 7vw, 96px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, #fff7d6, #dfb85f 42%, #8b651d 76%, #2b1d0b);
+    box-shadow: inset -8px -10px 22px rgba(62,42,9,.45), 0 24px 46px rgba(0,0,0,.35);
+    transform: translate3d(calc(var(--x) + var(--dx, 0px)), calc(var(--y) + var(--dy, 0px)), 0) rotateX(62deg) rotateZ(var(--r));
+    will-change: transform, translate, rotate;
+  }
+  .coin::after {
+    content: "";
+    position: absolute;
+    inset: 27%;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.42);
+  }
+  .coin.c1 { --x: 13vw; --y: 18%; --r: -16deg; }
+  .coin.c2 { --x: 70vw; --y: 15%; --r: 22deg; width: clamp(44px, 5vw, 76px); }
+  .coin.c3 { --x: 51vw; --y: 48%; --r: 9deg; width: clamp(66px, 8vw, 116px); }
+
+  .scene-orbit {
+    position: absolute;
+    right: clamp(28px, 7vw, 96px);
+    top: clamp(34px, 9vw, 110px);
+    width: min(35vw, 360px);
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 255, 255, .11);
+    border-radius: 50%;
+    transform: translate3d(var(--dx, 0px), var(--dy, 0px), 0);
+    will-change: transform;
+    pointer-events: none;
+  }
+  .scene-orbit::before,
+  .scene-orbit::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+  }
+  .scene-orbit::before {
+    inset: 15%;
+    border: 1px dashed rgba(196, 181, 253, .25);
+    animation: orbitSpin 18s linear infinite;
+  }
+  .scene-orbit::after {
+    width: 16px;
+    aspect-ratio: 1;
+    right: 13%;
+    top: 24%;
+    background: #fff7d6;
+    box-shadow: 0 0 28px rgba(255, 247, 214, .74);
+  }
+  @keyframes orbitSpin { to { rotate: 360deg; } }
+
+  .scene-hud {
+    position: absolute;
+    left: clamp(18px, 4vw, 48px);
+    bottom: clamp(18px, 4vw, 42px);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    transform: translate3d(var(--dx, 0px), var(--dy, 0px), 0);
+    will-change: transform;
+  }
+  .scene-stat {
+    min-width: 150px;
+    border-radius: 999px;
+    padding: 12px 16px;
+    color: #fff;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.16);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 22px 44px rgba(0,0,0,.2);
+  }
+  .scene-stat b {
+    display: block;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .scene-stat small {
+    display: block;
+    margin-top: 5px;
+    color: rgba(255,255,255,.58);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  section { position: relative; }
+  .section-pad { padding: 116px 0; }
+  .split-head {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(320px, .7fr);
+    gap: 56px;
+    align-items: end;
+    margin-bottom: 32px;
+  }
+  .eyebrow {
+    color: var(--lav);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .16em;
+  }
+  h2 {
+    margin: 12px 0 0;
+    font-size: clamp(36px, 5.6vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+  .lead {
+    color: var(--soft);
+    font-size: 17px;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .card {
+    position: relative;
+    min-height: 420px;
+    border-radius: 36px;
+    padding: 30px;
+    overflow: hidden;
+    border: 1px solid rgba(15,23,42,.08);
+    box-shadow: var(--shadow);
+    transform-style: preserve-3d;
+    isolation: isolate;
+    will-change: transform;
+  }
+  .card h3 {
+    margin: 0;
+    font-size: clamp(28px, 3.5vw, 46px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    position: relative;
+    z-index: 2;
+  }
+  .card p {
+    color: var(--soft);
+    line-height: 1.7;
+    max-width: 430px;
+    position: relative;
+    z-index: 2;
+  }
+  .card.wide { grid-column: span 2; background: linear-gradient(140deg, #f4f0ff, #fff); }
+  .card.dark-card {
+    color: #fff;
+    background:
+      radial-gradient(circle at calc(var(--mx) * 100%) calc(var(--my) * 100%), rgba(139,92,246,.4), transparent 42%),
+      linear-gradient(145deg, #211042, #0b0a10);
+    border-color: var(--dark-line);
+  }
+  .card.dark-card p { color: rgba(255,255,255,.62); }
+  .flower {
+    position: absolute;
+    right: 4%;
+    bottom: -8%;
+    width: min(48%, 420px);
+    aspect-ratio: 1;
+    transform: translateZ(32px);
+  }
+  .petal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 30%;
+    height: 54%;
+    border-radius: 999px 999px 44px 44px;
+    background: linear-gradient(180deg, #fff, #c4b5fd 30%, #7c3aed);
+    transform-origin: 50% 88%;
+    box-shadow: inset 0 0 18px rgba(255,255,255,.5), 0 20px 40px rgba(139,92,246,.22);
+  }
+  .petal:nth-child(1) { transform: translate(-50%, -88%) rotate(0deg); }
+  .petal:nth-child(2) { transform: translate(-50%, -88%) rotate(72deg); }
+  .petal:nth-child(3) { transform: translate(-50%, -88%) rotate(144deg); }
+  .petal:nth-child(4) { transform: translate(-50%, -88%) rotate(216deg); }
+  .petal:nth-child(5) { transform: translate(-50%, -88%) rotate(288deg); }
+  .flower::after {
+    content: "";
+    position: absolute;
+    inset: 38%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff8cf, #d8a93e 60%, #5b3a0f);
+    box-shadow: 0 18px 38px rgba(0,0,0,.22);
+  }
+  .liquidity {
+    position: absolute;
+    inset: auto 26px 24px;
+    display: grid;
+    gap: 10px;
+    z-index: 2;
+  }
+  .bar {
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.13);
+    overflow: hidden;
+  }
+  .bar span {
+    display: block;
+    height: 100%;
+    width: var(--w);
+    background: linear-gradient(90deg, var(--lav), var(--violet));
+  }
+
+  .ticker {
+    padding: 72px 0;
+    overflow: hidden;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .ticker h3 {
+    text-align: center;
+    margin: 0 0 28px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .marquee {
+    display: flex;
+    gap: 18px;
+    width: max-content;
+    animation: marquee 28s linear infinite;
+  }
+  .logo-pill {
+    height: 72px;
+    min-width: 180px;
+    border-radius: 24px;
+    border: 1px solid rgba(15,23,42,.06);
+    background: #f7f8fb;
+    display: grid;
+    place-items: center;
+    color: #202536;
+    font-size: 18px;
+    font-weight: 800;
+    filter: grayscale(1);
+    opacity: .72;
+  }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  .dark-zone {
+    color: #fff;
+    background:
+      radial-gradient(circle at 18% 8%, rgba(139,92,246,.28), transparent 34%),
+      linear-gradient(180deg, #0b0a10, #12081f 58%, #0b0a10);
+  }
+  .dark-zone .lead { color: rgba(255,255,255,.62); }
+  .dark-zone .eyebrow { color: var(--violet); }
+
+  .usecases {
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
+  }
+  .use-copy {
+    position: sticky;
+    top: 120px;
+    padding-top: 8px;
+  }
+  .stack {
+    display: grid;
+    gap: 28px;
+  }
+  .use-card {
+    position: sticky;
+    top: 110px;
+    min-height: 540px;
+    border-radius: 44px;
+    padding: 38px;
+    overflow: hidden;
+    border: 1px solid var(--dark-line);
+    background: linear-gradient(145deg, rgba(255,255,255,.11), rgba(255,255,255,.04));
+    backdrop-filter: blur(12px);
+    box-shadow: 0 42px 90px rgba(0,0,0,.28);
+    will-change: transform, opacity;
+  }
+  .use-card:nth-child(2) { top: 138px; }
+  .use-card:nth-child(3) { top: 166px; }
+  .use-card h3 { margin: 0; font-size: clamp(32px, 4.5vw, 58px); letter-spacing: -0.045em; line-height: 1; }
+  .use-card p { color: rgba(255,255,255,.62); max-width: 520px; line-height: 1.7; }
+  .temple {
+    position: absolute;
+    right: clamp(20px, 6vw, 80px);
+    bottom: 36px;
+    width: min(48%, 440px);
+    height: 260px;
+    perspective: 900px;
+  }
+  .temple-base, .temple-roof {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background: linear-gradient(135deg, #eee7ff, #8b5cf6 48%, #2e1065);
+    box-shadow: 0 28px 60px rgba(139,92,246,.26);
+  }
+  .temple-base { bottom: 0; width: 100%; height: 46px; border-radius: 18px; }
+  .temple-roof { top: 0; width: 88%; height: 56px; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .pillar {
+    position: absolute;
+    bottom: 42px;
+    width: 13%;
+    height: 170px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #fff, #c4b5fd, #6d28d9);
+  }
+  .pillar:nth-child(3) { left: 10%; }
+  .pillar:nth-child(4) { left: 31%; }
+  .pillar:nth-child(5) { left: 52%; }
+  .pillar:nth-child(6) { left: 73%; }
+
+  .live {
+    background: var(--paper);
+    padding: 116px 0;
+  }
+  .live-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .92fr) minmax(360px, .58fr);
+    gap: 24px;
+    align-items: stretch;
+  }
+  .live-panel {
+    border-radius: 40px;
+    background: #fff;
+    border: 1px solid rgba(15,23,42,.08);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .live-main {
+    padding: clamp(28px, 5vw, 54px);
+    min-height: 560px;
+    display: grid;
+    align-content: space-between;
+    background:
+      radial-gradient(circle at 76% 18%, rgba(139,92,246,.14), transparent 32%),
+      #fff;
+  }
+  .live-value {
+    font-size: clamp(58px, 10vw, 126px);
+    line-height: .9;
+    letter-spacing: -0.07em;
+    font-weight: 800;
+  }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    border-radius: 28px;
+    overflow: hidden;
+    background: rgba(15,23,42,.08);
+    border: 1px solid rgba(15,23,42,.08);
+  }
+  .metric {
+    background: #fff;
+    padding: 18px;
+  }
+  .metric span {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .metric b { display: block; margin-top: 8px; font-size: 24px; }
+
+  .console {
+    padding: 18px;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 12px;
+    min-height: 560px;
+  }
+  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tab {
+    min-height: 40px;
+    border: 0;
+    border-radius: 999px;
+    font-weight: 800;
+    color: var(--soft);
+    background: #f4f2fb;
+  }
+  .tab.active { color: #fff; background: var(--obsidian); }
+  .pane { display: none; }
+  .pane.active { display: grid; gap: 12px; animation: paneIn .24s ease both; }
+  @keyframes paneIn {
+    from { opacity: 0; transform: translateY(8px); filter: blur(4px); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+  .command { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+  .field {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid rgba(15,23,42,.1);
+    border-radius: 18px;
+    background: #f8f9fa;
+    color: var(--ink);
+    padding: 0 14px;
+    outline: none;
+  }
+  .field:focus { border-color: rgba(139,92,246,.5); box-shadow: 0 0 0 4px rgba(139,92,246,.1); }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    border: 1px solid rgba(15,23,42,.08);
+    border-radius: 999px;
+    min-height: 32px;
+    padding: 0 11px;
+    background: #fff;
+    color: var(--soft);
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .stream {
+    min-height: 250px;
+    max-height: 340px;
+    overflow: auto;
+    display: grid;
+    align-content: start;
+    gap: 9px;
+    border-radius: 26px;
+    background: #f8f9fa;
+    padding: 12px;
+  }
+  .msg {
+    justify-self: start;
+    max-width: 92%;
+    border-radius: 18px;
+    padding: 10px 12px;
+    background: #fff;
+    color: var(--soft);
+    font-size: 13px;
+    line-height: 1.5;
+    word-break: break-word;
+    white-space: pre-wrap;
+    box-shadow: inset 0 0 0 1px rgba(15,23,42,.06);
+  }
+  .msg.me { justify-self: end; color: #fff; background: var(--obsidian); }
+  .msg.system { color: #7a4d00; background: #fff2d6; }
+  .msg a { color: var(--lav); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+  .quick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mini {
+    display: grid;
+    gap: 8px;
+    border-radius: 24px;
+    padding: 12px;
+    background: #f8f9fa;
+  }
+  .readout { display: grid; gap: 8px; }
+  .readrow {
+    min-height: 38px;
+    border-radius: 16px;
+    background: #f8f9fa;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--soft);
+    font-size: 13px;
+  }
+  .readrow b { color: var(--ink); }
+
+  .footer {
+    padding: 42px 0 56px;
+    color: rgba(255,255,255,.62);
+    background: var(--obsidian);
+    text-align: center;
+  }
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(8px);
+  }
+
+  @media (max-width: 980px) {
+    .nav-links { display: none; }
+    .hero { padding-top: 116px; }
+    .split-head, .usecases, .live-grid { grid-template-columns: 1fr; }
+    .bento { grid-template-columns: 1fr; }
+    .card.wide { grid-column: auto; }
+    .use-copy { position: relative; top: auto; }
+    .use-card, .use-card:nth-child(2), .use-card:nth-child(3) { position: relative; top: auto; }
+    .temple { opacity: .46; width: 68%; }
+  }
+  @media (max-width: 680px) {
+    .wrap { width: min(100% - 26px, 1180px); }
+    .nav { width: calc(100% - 24px); justify-content: space-between; gap: 8px; }
+    .brand > span:not(.brand-mark) { display: none; }
+    .scroll-rail { display: none; }
+    .btn { min-height: 38px; padding: 0 13px; font-size: 12px; }
+    .hero-visual { min-height: 380px; height: 50vh; border-radius: 32px; }
+    .scene-orbit { width: 270px; right: -40px; top: 70px; opacity: .55; }
+    .scene-hud { left: 14px; right: 14px; bottom: 14px; }
+    .scene-stat { flex: 1 1 130px; min-width: 0; padding: 10px 12px; }
+    .coin.c1 { --x: 5vw; --y: 18%; }
+    .coin.c2 { --x: 72vw; --y: 18%; }
+    .coin.c3 { --x: 40vw; --y: 54%; }
+    .section-pad, .live { padding: 82px 0; }
+    .card, .use-card, .live-panel { border-radius: 28px; }
+    .metrics, .quick { grid-template-columns: 1fr; }
+    .live-value { font-size: clamp(54px, 18vw, 84px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    .marquee { animation: none; }
+    .scene-orbit::before { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="scroll-rail" aria-hidden="true"></div>
+<div class="nav-shell">
+  <nav class="nav">
+    <a class="brand" href="#top"><span class="brand-mark"></span><span>Anchor</span></a>
+    <div class="nav-links">
+      <a href="#vault">USD anchor</a>
+      <a href="#business">Business</a>
+      <a href="#treasury">Treasury</a>
+      <a href="#developers">Developers</a>
+      <a href="#live">Try it</a>
+    </div>
+    <a class="btn dark magnetic" href="#live">Launch BETA</a>
+  </nav>
+</div>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-copy" data-reveal>
+      <span class="badge"><i data-lucide="sprout"></i> Pharos testnet savings agent</span>
+      <h1>Where Money <span>Grows</span></h1>
+      <p>Anchor turns plain language saving into programmable, verifiable testnet yield. People save in seconds. AI agents park idle balances between tasks.</p>
+      <div class="hero-actions">
+        <a class="btn dark magnetic" href="#live"><i data-lucide="sparkles"></i> Try it now</a>
+        <a class="btn magnetic" href="#vault"><i data-lucide="arrow-down"></i> Explore Anchor</a>
+      </div>
+    </div>
+    <div class="hero-visual" id="heroVisual">
+      <canvas id="gardenCanvas"></canvas>
+      <span class="scene-orbit" data-depth="0.18"></span>
+      <span class="coin c1" data-float data-depth="0.34"></span>
+      <span class="coin c2" data-float data-depth="0.2"></span>
+      <span class="coin c3" data-float data-depth="0.42"></span>
+      <div class="scene-hud" data-depth="0.28">
+        <span class="scene-stat"><b>12.9%</b><small>APY mirror</small></span>
+        <span class="scene-stat"><b>Live</b><small>Receipts online</small></span>
+      </div>
+      <div class="scene-glass"></div>
+    </div>
+  </section>
+
+  <section class="section-pad" id="vault">
+    <div class="wrap">
+      <div class="split-head">
+        <div data-reveal>
+          <span class="eyebrow">What is Anchor?</span>
+          <h2>Yield bearing savings for humans and agents.</h2>
+        </div>
+        <div data-reveal>
+          <p class="lead">Anchor mirrors a RealFi yield mix on Pharos Atlantic testnet, then wraps it in a service agent that anyone can call from chat, API, or agent tooling.</p>
+          <a class="btn violet magnetic" href="#live" style="margin-top:18px">Explore now</a>
+        </div>
+      </div>
+
+      <div class="bento">
+        <article class="card wide tilt" data-reveal>
+          <h3>Capital that grows</h3>
+          <p>Save faucet aUSD into an onchain vault that accrues a pAlpha style yield mirror and returns an explorer receipt for every movement.</p>
+          <div class="flower" aria-hidden="true">
+            <span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span>
+          </div>
+        </article>
+        <article class="card dark-card tilt" data-reveal>
+          <h3>Always liquid, always legible</h3>
+          <p>Withdraw, inspect, and verify positions without making users think in wallet addresses.</p>
+          <div class="liquidity"><div class="bar"><span style="--w:88%"></span></div><div class="bar"><span style="--w:64%"></span></div><div class="bar"><span style="--w:76%"></span></div></div>
+        </article>
+        <article class="card dark-card tilt" data-reveal>
+          <h3>Agent treasury mode</h3>
+          <p>Any AI agent can park idle testnet balances, recall on demand, and expose its treasury onchain by agent id.</p>
+        </article>
+        <article class="card tilt" data-reveal style="background:#fff">
+          <h3>100% hands free</h3>
+          <p>Round-ups, goals, projections, and daily checks are all one sentence away.</p>
+        </article>
+        <article class="card wide tilt" data-reveal style="background:linear-gradient(135deg,#fff,#f1efff)">
+          <h3>Receipts, not promises</h3>
+          <p>Anchor's demo is honest: testnet value, simulated yield mirror, verifiable receipts, and mainnet ready architecture when live RWA integrations arrive.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="ticker">
+    <h3>Built for the Pharos AI Agent Carnival ecosystem</h3>
+    <div class="marquee" aria-hidden="true">
+      <span class="logo-pill">Pharos</span><span class="logo-pill">Anvita Flow</span><span class="logo-pill">RealFi</span><span class="logo-pill">SocialScan</span><span class="logo-pill">phase 2</span><span class="logo-pill">Darkfallx</span>
+      <span class="logo-pill">Pharos</span><span class="logo-pill">Anvita Flow</span><span class="logo-pill">RealFi</span><span class="logo-pill">SocialScan</span><span class="logo-pill">phase 2</span><span class="logo-pill">Darkfallx</span>
+    </div>
+  </section>
+
+  <section class="dark-zone section-pad" id="business">
+    <div class="wrap usecases">
+      <aside class="use-copy" data-reveal>
+        <span class="eyebrow">Use cases</span>
+        <h2>Business & Treasury</h2>
+        <p class="lead" id="useText">Anchor is designed for repeat usage: users save daily, agents park between tasks, and builders can route treasury actions through one service agent.</p>
+      </aside>
+      <div class="stack">
+        <article class="use-card" data-use="Platforms integrate Anchor as a savings action inside chat, wallet, and task flows.">
+          <h3>Business integration</h3>
+          <p>Platforms can offer a "save the change" or "park idle funds" action without building vault UX from scratch.</p>
+          <div class="temple" aria-hidden="true"><div class="temple-roof"></div><div class="temple-base"></div><div class="pillar"></div><div class="pillar"></div><div class="pillar"></div><div class="pillar"></div></div>
+        </article>
+        <article class="use-card" id="treasury" data-use="Agents get a treasury memory: park, inspect, recall, and rank by verifiable position.">
+          <h3>Agent treasury</h3>
+          <p>Every service agent can hold an idle balance between jobs and recall it when the next task needs funds.</p>
+          <div class="temple" aria-hidden="true"><div class="temple-roof"></div><div class="temple-base"></div><div class="pillar"></div><div class="pillar"></div><div class="pillar"></div><div class="pillar"></div></div>
+        </article>
+        <article class="use-card" id="developers" data-use="Developers get a clean Service Agent package: SKILL.md, Agent Card, endpoints, MCP tools, and testnet contracts.">
+          <h3>Developer ready</h3>
+          <p>HTTP, MCP, Agent Card metadata, and demo contracts are packaged for Anvita Flow submission and debugging.</p>
+          <div class="temple" aria-hidden="true"><div class="temple-roof"></div><div class="temple-base"></div><div class="pillar"></div><div class="pillar"></div><div class="pillar"></div><div class="pillar"></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="live" id="live">
+    <div class="wrap">
+      <div class="split-head">
+        <div data-reveal>
+          <span class="eyebrow">Live beta</span>
+          <h2>Talk to Anchor.</h2>
+        </div>
+        <p class="lead" data-reveal>This is the live testnet surface: chat, save, project, park agent funds, and inspect readiness without leaving the page.</p>
+      </div>
+
+      <div class="live-grid">
+        <article class="live-panel live-main" data-reveal>
+          <div>
+            <span class="badge"><i data-lucide="activity"></i> Current position</span>
+            <div class="live-value tabular" id="totalValue">$0.00</div>
+            <p class="lead" id="positionNote">Loading the Anchor testnet position.</p>
+          </div>
+          <div class="metrics">
+            <div class="metric"><span>Principal</span><b id="principalValue">$0.00</b></div>
+            <div class="metric"><span>Earned</span><b id="earnedValue">$0.00</b></div>
+            <div class="metric"><span>APY Mirror</span><b id="apyValue">12.9%</b></div>
+          </div>
+        </article>
+
+        <aside class="live-panel console" data-reveal>
+          <div class="tabs">
+            <button class="tab active" data-pane="chat">Chat</button>
+            <button class="tab" data-pane="agent">Agent</button>
+            <button class="tab" data-pane="ops">Ops</button>
+          </div>
+
+          <section class="pane active" id="pane-chat">
+            <form class="command" id="composer">
+              <input class="field" id="commandInput" autocomplete="off" placeholder="save 20" />
+              <button class="btn dark" id="sendBtn" type="submit"><i data-lucide="send"></i></button>
+            </form>
+            <div class="chips" id="chips"></div>
+            <div class="stream" id="stream"></div>
+            <div class="quick">
+              <div class="mini"><strong>Save</strong><input class="field" id="saveAmount" type="number" min="0" step="0.01" value="20" /><button class="btn violet" id="saveBtn">Save</button></div>
+              <div class="mini"><strong>Round up</strong><input class="field" id="roundupSpend" type="number" min="0" step="0.01" value="4.50" /><button class="btn" id="roundupBtn">Skim</button></div>
+            </div>
+          </section>
+
+          <section class="pane" id="pane-agent">
+            <div class="mini"><strong>Agent treasury</strong><input class="field" id="agentName" value="scout-1" /><input class="field" id="agentAmount" type="number" min="0" step="0.01" value="5" /><div class="quick"><button class="btn violet" id="parkBtn">Park</button><button class="btn" id="recallBtn">Recall</button></div><button class="btn dark" id="agentPositionBtn">Inspect</button></div>
+            <div class="readout" id="agentReadout"></div>
+          </section>
+
+          <section class="pane" id="pane-ops">
+            <div class="readout" id="readinessRows"></div>
+            <div class="mini"><strong>Operator secret</strong><input class="field" id="secretInput" type="password" autocomplete="off" placeholder="session secret" /><button class="btn" id="saveSecret">Store</button></div>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">Anchor runs on Pharos Atlantic testnet with faucet aUSD and verifiable receipts.</footer>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const $ = (id) => document.getElementById(id);
+    const state = { history: [], health: null, rate: null, position: null };
+    const prompts = ['save 20', "how's my money?", "what's the rate?", 'round up my 4.50 coffee', 'what if I save 50 a month for a year?'];
+    const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (window.lucide) window.lucide.createIcons();
+
+    if (window.Lenis && !prefersReduced) {
+      const lenis = new Lenis({ lerp: 0.08, wheelMultiplier: 0.88, smoothWheel: true });
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+      window.lenis = lenis;
+    } else {
+      document.documentElement.style.scrollBehavior = 'smooth';
+    }
+
+    function money(value, digits = 2) {
+      const n = Number(value || 0);
+      return '$' + n.toLocaleString(undefined, { minimumFractionDigits: digits, maximumFractionDigits: digits });
+    }
+    function shortHash(value) { return value ? value.slice(0, 6) + '...' + value.slice(-4) : ''; }
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
+    }
+    function linkify(text) { return escapeHtml(text).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener">receipt</a>'); }
+    function secretHeaders() {
+      const secret = sessionStorage.getItem('anchorSecret') || '';
+      return secret ? { 'x-anchor-action-secret': secret, 'x-anchor-agent-secret': secret } : {};
+    }
+    async function api(path, options = {}) {
+      const headers = { ...(options.headers || {}), ...secretHeaders() };
+      const res = await fetch(path, { ...options, headers });
+      const text = await res.text();
+      const data = text ? JSON.parse(text) : null;
+      if (!res.ok) throw new Error(data?.error || res.statusText || 'Request failed');
+      return data;
+    }
+    function addMsg(role, text) {
+      const el = document.createElement('div');
+      el.className = 'msg ' + role;
+      el.innerHTML = role === 'me' ? escapeHtml(text) : linkify(text);
+      $('stream').appendChild(el);
+      $('stream').scrollTop = $('stream').scrollHeight;
+    }
+    function readrow(label, value) {
+      return `<div class="readrow"><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b></div>`;
+    }
+    function renderPosition(pos) {
+      state.position = pos;
+      $('totalValue').textContent = money(pos?.total);
+      $('principalValue').textContent = money(pos?.principal);
+      $('earnedValue').textContent = money(pos?.earned, 6);
+      $('positionNote').textContent = pos?.address ? `${shortHash(pos.address)} is accruing in the Atlantic testnet yield mirror.` : 'Anchor position is ready.';
+    }
+    function renderHealth(h) {
+      state.health = h;
+      $('readinessRows').innerHTML = [
+        readrow('Vault', h.deployed ? 'ready' : 'missing'),
+        readrow('Wallet', h.hasWallet ? 'ready' : 'missing'),
+        readrow('Agent vault', h.agentMode ? 'ready' : 'missing'),
+        readrow('LLM', h.llm ? h.llmProvider : 'parser fallback'),
+        readrow('Max amount', h.safety?.maxAmount || '10000')
+      ].join('');
+    }
+    async function refreshHealth() { renderHealth(await api('/health')); }
+    async function refreshRate() {
+      const r = await api('/rate');
+      state.rate = r;
+      $('apyValue').textContent = `${Number(r.apyPercent || 12.9).toFixed(1)}%`;
+    }
+    async function refreshPosition() { renderPosition(await api('/position')); }
+
+    async function runChat(text) {
+      if (!text.trim()) return;
+      addMsg('me', text);
+      state.history.push({ role: 'user', content: text });
+      $('sendBtn').disabled = true;
+      try {
+        const res = await api('/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, history: state.history.slice(0, -1) })
+        });
+        const reply = res.message || 'Done.';
+        addMsg('bot', reply);
+        state.history.push({ role: 'assistant', content: reply });
+        if (res.data?.position) renderPosition(res.data.position);
+        else if (res.data?.total !== undefined) renderPosition(res.data);
+        else await refreshPosition();
+      } catch (err) {
+        addMsg('system', err.message);
+      } finally {
+        $('sendBtn').disabled = false;
+      }
+    }
+    async function postAction(path, body) {
+      try {
+        const res = await api(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        addMsg('bot', res.message || `Done. ${res.explorerUrl || ''}`);
+        if (res.position) renderPosition(res.position);
+        return res;
+      } catch (err) {
+        addMsg('system', err.message);
+        throw err;
+      }
+    }
+    function renderAgent(pos) {
+      $('agentReadout').innerHTML = [readrow('Agent', pos.agent), readrow('Parked', money(pos.parked)), readrow('Earned', money(pos.earned, 6)), readrow('Total', money(pos.total))].join('');
+    }
+
+    prompts.forEach((p) => {
+      const b = document.createElement('button');
+      b.className = 'chip';
+      b.type = 'button';
+      b.textContent = p;
+      b.onclick = () => runChat(p);
+      $('chips').appendChild(b);
+    });
+    addMsg('bot', "Hi, I'm Anchor. Try: save 20.");
+
+    const depthEls = Array.from(document.querySelectorAll('[data-depth]'));
+
+    document.querySelectorAll('.tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach((t) => t.classList.toggle('active', t === tab));
+        document.querySelectorAll('.pane').forEach((p) => p.classList.toggle('active', p.id === `pane-${tab.dataset.pane}`));
+      });
+    });
+    $('composer').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const value = $('commandInput').value;
+      $('commandInput').value = '';
+      runChat(value);
+    });
+    $('saveBtn').onclick = () => postAction('/save', { amount: Number($('saveAmount').value) });
+    $('roundupBtn').onclick = () => postAction('/roundup', { spend: Number($('roundupSpend').value) });
+    $('parkBtn').onclick = async () => { const res = await postAction('/agent/park', { agent: $('agentName').value, amount: Number($('agentAmount').value) }); if (res.position) renderAgent(res.position); };
+    $('recallBtn').onclick = async () => { const res = await postAction('/agent/recall', { agent: $('agentName').value, amount: 'all' }); if (res.position) renderAgent(res.position); };
+    $('agentPositionBtn').onclick = async () => { try { renderAgent(await api('/agent/position?agent=' + encodeURIComponent($('agentName').value))); } catch (err) { $('agentReadout').innerHTML = readrow('Error', err.message); } };
+    $('saveSecret').onclick = () => { const value = $('secretInput').value.trim(); if (value) sessionStorage.setItem('anchorSecret', value); else sessionStorage.removeItem('anchorSecret'); $('secretInput').value = ''; };
+
+    document.addEventListener('pointermove', (e) => {
+      const x = e.clientX / innerWidth;
+      const y = e.clientY / innerHeight;
+      document.documentElement.style.setProperty('--mx', x.toFixed(4));
+      document.documentElement.style.setProperty('--my', y.toFixed(4));
+      if (!prefersReduced) {
+        const px = x - .5;
+        const py = y - .5;
+        depthEls.forEach((el) => {
+          const depth = Number(el.dataset.depth || 0);
+          el.style.setProperty('--dx', `${(-px * depth * 72).toFixed(2)}px`);
+          el.style.setProperty('--dy', `${(-py * depth * 54).toFixed(2)}px`);
+        });
+      }
+    }, { passive: true });
+
+    document.querySelectorAll('.magnetic').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        if (prefersReduced) return;
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) / r.width;
+        const y = (e.clientY - r.top - r.height / 2) / r.height;
+        el.style.transform = `translate3d(${(x * 12).toFixed(1)}px, ${(y * 10).toFixed(1)}px, 0) scale(1.035)`;
+      });
+      el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+    });
+
+    document.querySelectorAll('.tilt').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        if (prefersReduced) return;
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5;
+        const y = (e.clientY - r.top) / r.height - .5;
+        card.style.transform = `rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 7).toFixed(2)}deg) translateY(-4px)`;
+      });
+      card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+    });
+
+    const canvas = $('gardenCanvas');
+    const ctx = canvas.getContext('2d');
+    const stems = Array.from({ length: 58 }, () => ({ x: Math.random(), h: .16 + Math.random() * .45, sway: Math.random() * Math.PI * 2, c: Math.random() }));
+    function resizeCanvas() {
+      const r = canvas.getBoundingClientRect();
+      const dpr = Math.min(2, devicePixelRatio || 1);
+      canvas.width = Math.floor(r.width * dpr);
+      canvas.height = Math.floor(r.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function drawGarden(t) {
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      const grd = ctx.createLinearGradient(0, h * .42, 0, h);
+      grd.addColorStop(0, 'rgba(139,92,246,.02)');
+      grd.addColorStop(.55, 'rgba(56,189,133,.13)');
+      grd.addColorStop(1, 'rgba(11,10,16,.8)');
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, h * .42, w, h * .58);
+      stems.forEach((s) => {
+        const x = s.x * w;
+        const base = h * (.82 + s.c * .14);
+        const len = h * s.h;
+        const sway = Math.sin(t / 1400 + s.sway) * 14;
+        ctx.beginPath();
+        ctx.moveTo(x, base);
+        ctx.quadraticCurveTo(x + sway, base - len * .52, x + sway * 1.5, base - len);
+        ctx.strokeStyle = `rgba(167,139,250,${.22 + s.c * .28})`;
+        ctx.lineWidth = 1.3 + s.c * 1.8;
+        ctx.stroke();
+        const fx = x + sway * 1.5;
+        const fy = base - len;
+        for (let i = 0; i < 5; i++) {
+          const a = i * Math.PI * 2 / 5 + t / 5000;
+          ctx.beginPath();
+          ctx.ellipse(fx + Math.cos(a) * 8, fy + Math.sin(a) * 8, 6 + s.c * 5, 13 + s.c * 8, a, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${190 + s.c * 30}, ${165 + s.c * 35}, 253, ${.18 + s.c * .38})`;
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(fx, fy, 3 + s.c * 4, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,231,150,.58)';
+        ctx.fill();
+      });
+      if (!prefersReduced) requestAnimationFrame(drawGarden);
+    }
+    resizeCanvas();
+    addEventListener('resize', resizeCanvas);
+    requestAnimationFrame(drawGarden);
+
+    function nativeScrollEffects() {
+      const doc = document.documentElement;
+      const scrollMax = Math.max(1, doc.scrollHeight - innerHeight);
+      doc.style.setProperty('--scroll', Math.min(1, Math.max(0, scrollY / scrollMax)).toFixed(4));
+
+      const hero = document.querySelector('.hero');
+      const heroVisual = $('heroVisual');
+      const heroRect = hero.getBoundingClientRect();
+      const heroProgress = Math.min(1, Math.max(0, -heroRect.top / Math.max(1, heroRect.height)));
+      if (!prefersReduced && !(window.gsap && window.ScrollTrigger)) {
+        heroVisual.style.transform = `translateY(${heroProgress * 72}px) scale(${1 - heroProgress * .055})`;
+        document.querySelectorAll('[data-float]').forEach((el, i) => {
+          const dir = i % 2 ? -1 : 1;
+          el.style.translate = `0 ${dir * heroProgress * 42}px`;
+          el.style.rotate = `${dir * heroProgress * 18}deg`;
+        });
+      }
+      let activeUse = null;
+      document.querySelectorAll('.use-card').forEach((card) => {
+        const r = card.getBoundingClientRect();
+        if (r.top < innerHeight * .55 && r.bottom > innerHeight * .32) activeUse = card;
+      });
+      if (activeUse && activeUse.dataset.use) $('useText').textContent = activeUse.dataset.use;
+
+      const sections = ['vault', 'business', 'treasury', 'developers', 'live'];
+      let active = '';
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        if (r.top < innerHeight * .38 && r.bottom > innerHeight * .22) active = id;
+      });
+      document.querySelectorAll('.nav-links a').forEach((link) => {
+        const href = (link.getAttribute('href') || '').replace('#', '');
+        link.style.color = href === active ? 'var(--ink)' : '';
+      });
+    }
+
+    if (window.gsap && window.ScrollTrigger && !prefersReduced) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.utils.toArray('[data-reveal]').forEach((el) => {
+        gsap.to(el, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 82%' } });
+      });
+      gsap.to('#heroVisual', { scale: .94, y: 80, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+      gsap.utils.toArray('[data-float]').forEach((el, i) => {
+        gsap.to(el, { yPercent: i % 2 ? -30 : 26, rotateZ: i % 2 ? 22 : -18, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+      });
+      gsap.utils.toArray('.use-card').forEach((card) => {
+        ScrollTrigger.create({
+          trigger: card,
+          start: 'top 45%',
+          end: 'bottom 45%',
+          onEnter: () => $('useText').textContent = card.dataset.use,
+          onEnterBack: () => $('useText').textContent = card.dataset.use
+        });
+      });
+    } else {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const animation = entry.target.animate(
+            [
+              { opacity: 0, transform: 'translateY(30px)', filter: 'blur(8px)' },
+              { opacity: 1, transform: 'translateY(0)', filter: 'blur(0px)' }
+            ],
+            { duration: prefersReduced ? 1 : 850, easing: 'cubic-bezier(.2,.75,.18,1)', fill: 'forwards' }
+          );
+          animation.onfinish = () => {
+            entry.target.style.opacity = 1;
+            entry.target.style.transform = 'none';
+            entry.target.style.filter = 'none';
+          };
+          revealObserver.unobserve(entry.target);
+        });
+      }, { threshold: .12, rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('[data-reveal]').forEach((el) => revealObserver.observe(el));
+    }
+    nativeScrollEffects();
+    addEventListener('scroll', nativeScrollEffects, { passive: true });
+    addEventListener('resize', nativeScrollEffects, { passive: true });
+
+    refreshHealth().catch((err) => addMsg('system', err.message));
+    refreshRate().catch(() => {});
+    refreshPosition().catch((err) => addMsg('system', err.message));
+  });
+</script>
+</body>
+</html>

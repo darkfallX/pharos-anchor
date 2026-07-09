@@ -1,0 +1,7 @@
+{
+  "network": "pharos-atlantic",
+  "chainId": 688689,
+  "usd": "0x5d6d0ff224c7940d1918f1dedaf5c4cd75fae677",
+  "vault": "0xe1370ba133a08edf82052004762373dc1ad8102f",
+  "apyBps": 1290
+}

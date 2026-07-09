@@ -1,0 +1,82 @@
+{
+  "name": "Anchor",
+  "handle": "anchor",
+  "tagline": "The savings account for people and AI agents.",
+  "description": "A testnet savings agent for the Pharos AI economy. People talk to it in plain words and it puts faucet aUSD into an on-chain vault that mirrors the Pharos pAlpha RealFi yield mix (about 12.9% net a year). AI agents call it to park idle testnet balances between tasks and recall them on demand, with every agent's position tracked on-chain and publicly verifiable. Goals, round-ups, projections, receipts for everything.",
+  "category": "Savings & Yield",
+  "tags": ["savings", "rwa", "yield", "usdc", "pharos", "real-world-assets", "treasuries"],
+  "network": {
+    "name": "Pharos Atlantic Testnet",
+    "chainId": 688689,
+    "explorer": "https://pharos-testnet.socialscan.io"
+  },
+  "contracts": {
+    "vault": "0xe1370ba133a08edf82052004762373dc1ad8102f",
+    "usd": "0x5d6d0ff224c7940d1918f1dedaf5c4cd75fae677"
+  },
+  "examplePrompts": [
+    "save 20",
+    "how's my money doing?",
+    "what's the rate?",
+    "round up my 4.50 coffee",
+    "withdraw 5",
+    "set a goal to save 500 for a laptop",
+    "what if I save 50 a month for a year?"
+  ],
+  "capabilities": [
+    { "name": "save", "description": "Deposit money into the RWA yield vault", "input": "an amount, e.g. 20" },
+    { "name": "check_balance", "description": "Report savings, principal, and earned yield", "input": "none" },
+    { "name": "rate", "description": "Explain the current APY and the real-world assets behind it", "input": "none" },
+    { "name": "round_up", "description": "Round a purchase up to the next dollar and save the change", "input": "a purchase amount, e.g. 4.50" },
+    { "name": "withdraw", "description": "Send money back to the user, part or all", "input": "an amount or 'all'" },
+    { "name": "set_goal", "description": "Create a savings goal and track progress toward it", "input": "a name and a target amount" },
+    { "name": "get_goals", "description": "List savings goals and how close the user is to each", "input": "none" },
+    { "name": "project_savings", "description": "Project future savings from a monthly amount, with yield", "input": "a monthly amount and a number of months" },
+    { "name": "agent_park", "description": "Agent Mode: park an AI agent's idle testnet aUSD into the RWA-yield mirror between tasks", "input": "an agent name and an amount" },
+    { "name": "agent_recall", "description": "Agent Mode: recall a parked balance plus earned yield on demand", "input": "an agent name and an amount or 'all'" },
+    { "name": "agent_position", "description": "Agent Mode: check any agent's on-chain position and projections", "input": "an agent name" }
+  ],
+  "entrypoint": {
+    "type": "http",
+    "ask": "POST /ask { \"text\": \"save 20\" }",
+    "endpoints": ["POST /save", "POST /withdraw", "POST /roundup", "POST /goal", "GET /goals", "POST /project", "GET /position", "GET /rate", "GET /brief", "GET /health", "POST /agent/park", "POST /agent/recall", "GET /agent/position", "GET /agent/leaderboard"],
+    "mcp": "npm run mcp (stdio server: anchor_park, anchor_recall, anchor_position)"
+  },
+  "customerStrategy": "Confirm the amount before any save, withdrawal, park, or recall. If the amount, agent name, or goal target is missing, ask one short follow-up question. Always return the plain-language outcome plus the block-explorer receipt when a transaction is made.",
+  "customerInputsRequired": [
+    "For user savings: amount to save or withdraw, or the purchase amount for a round-up.",
+    "For goals: goal name and target amount.",
+    "For projections: monthly contribution and duration.",
+    "For Agent Mode: agent name and amount to park or recall."
+  ],
+  "deliverables": [
+    "Plain-English savings action result",
+    "Current position with principal, earned yield, and total",
+    "Explorer receipt link for every transaction",
+    "Agent treasury position or leaderboard when requested"
+  ],
+  "unsupported": [
+    "Mainnet deposits or production investment advice",
+    "Claims of guaranteed yield",
+    "Unauthenticated recall of another agent's funds when service secrets are enabled",
+    "Large transfers outside the configured testnet safety limits"
+  ],
+  "estimatedExecutionDuration": "Reads usually finish in 1-3 seconds. Testnet transactions usually finish in 5-25 seconds depending on RPC load.",
+  "pricing": {
+    "model": "free",
+    "amountUsdc": "0",
+    "publicPrice": "Free",
+    "note": "Keep public pricing Free while Anvita payment and x402 settlement are in beta. Paid per-call pricing can be enabled after the module is stable."
+  },
+  "yield": {
+    "netApyPercent": 12.9,
+    "mirrors": "Pharos pAlpha RealFi Ecosystem Vault",
+    "holdings": [
+      { "name": "Axil High Yield Consumer Credit", "weightPercent": 70, "apyPercent": 14.0 },
+      { "name": "Janus Henderson Anemoy Treasury (JTRSY)", "weightPercent": 30, "apyPercent": 3.65 }
+    ]
+  },
+  "homepage": "https://github.com/darkfallX/pharos-anchor",
+  "author": "Praise Ezekwe (darkfallX)",
+  "license": "MIT-0"
+}
