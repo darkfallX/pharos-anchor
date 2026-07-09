@@ -28,7 +28,7 @@ const TOOLS = [
   },
   {
     name: 'anchor_position',
-    description: "Check an agent's parked balance, earned yield, and projections. Positions are on-chain and publicly verifiable.",
+    description: "Check an agent's parked balance, earned yield, and projections. Positions are onchain and publicly verifiable.",
     inputSchema: {
       type: 'object',
       properties: { agent: { type: 'string', description: 'the agent name' } },

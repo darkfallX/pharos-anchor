@@ -25,7 +25,7 @@ async function main() {
 
   const pos = await agents.position('trader-7');
   say('anchor', `trader-7 position: parked ${pos.parked}, earned ${pos.earned} already, ${pos.apyPercent}% APY.`);
-  say('anchor', `anyone can verify this on-chain: ${pos.verify}`);
+  say('anchor', `anyone can verify this onchain: ${pos.verify}`);
 
   console.log('');
   say('scout-1', 'New task came in. I need my money back.');

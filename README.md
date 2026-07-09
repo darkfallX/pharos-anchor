@@ -4,7 +4,7 @@ The savings account for people and AI agents on Pharos testnet.
 
 You talk to Anchor in plain words. You say "save 20" and it puts faucet test dollars into a Pharos vault that mirrors a real-world-asset yield strategy. You can check your savings, add more, round up spare change, or take money out, all through ordinary sentences. No forms, no wallet addresses to copy, no DeFi knowledge needed.
 
-And it is not just for people. Any AI agent can use Anchor as its treasury: park idle testnet funds into the RWA-yield mirror between tasks, recall them the moment the next task needs funds. One POST to park, one to recall, every position on-chain and publicly verifiable per agent id.
+And it is not just for people. Any AI agent can use Anchor as its treasury: park idle testnet funds into the RWA-yield mirror between tasks, recall them the moment the next task needs funds. One POST to park, one to recall, every position onchain and publicly verifiable per agent id.
 
 Anchor's yield model mirrors the Pharos pAlpha RealFi Ecosystem Vault: 70% short-term emerging-market consumer credit and 30% short-duration US Treasuries, blended to about 12.9% net a year. On Atlantic testnet this is a demo vault with faucet aUSD, not a production mainnet investment product.
 
@@ -61,7 +61,7 @@ GET  /agent/position?agent=scout-1
 POST /agent/recall   { "agent": "scout-1", "amount": "all" }
 ```
 
-Every call returns a transaction receipt. `GET /agent/leaderboard` ranks the top-earning agents. Positions live in the AnchorAgentVault contract keyed by agent id, so anyone can verify any agent's balance on-chain.
+Every call returns a transaction receipt. `GET /agent/leaderboard` ranks the top-earning agents. Positions live in the AnchorAgentVault contract keyed by agent id, so anyone can verify any agent's balance onchain.
 
 MCP-capable agents (Claude Code, OpenClaw, Codex) can use Anchor as native tools:
 

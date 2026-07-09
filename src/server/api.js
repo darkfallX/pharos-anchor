@@ -78,7 +78,7 @@ app.get('/', (_req, res) => {
       agentPosition: 'GET /agent/position?agent=name',
       agentLeaderboard: 'GET /agent/leaderboard',
     },
-    agentMode: 'Any AI agent can park idle testnet aUSD here between tasks and accrue demo RWA-yield. One POST to park, one to recall, every position verifiable on-chain.',
+    agentMode: 'Any AI agent can park idle testnet aUSD here between tasks and accrue demo RWA-yield. One POST to park, one to recall, every position verifiable onchain.',
   });
 });
 

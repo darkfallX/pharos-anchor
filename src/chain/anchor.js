@@ -66,7 +66,7 @@ function wallet() {
 }
 
 function requireDeployed() {
-  if (!isDeployed()) throw new Error('Anchor is not set up on-chain yet. Run: npm run deploy');
+  if (!isDeployed()) throw new Error('Anchor is not set up onchain yet. Run: npm run deploy');
 }
 
 export function agentAddress() {

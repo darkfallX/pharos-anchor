@@ -2,7 +2,7 @@
   "name": "Anchor",
   "handle": "anchor",
   "tagline": "The savings account for people and AI agents.",
-  "description": "A testnet savings agent for the Pharos AI economy. People talk to it in plain words and it puts faucet aUSD into an on-chain vault that mirrors the Pharos pAlpha RealFi yield mix (about 12.9% net a year). AI agents call it to park idle testnet balances between tasks and recall them on demand, with every agent's position tracked on-chain and publicly verifiable. Goals, round-ups, projections, receipts for everything.",
+  "description": "A testnet savings agent for the Pharos AI economy. People talk to it in plain words and it puts faucet aUSD into an onchain vault that mirrors the Pharos pAlpha RealFi yield mix (about 12.9% net a year). AI agents call it to park idle testnet balances between tasks and recall them on demand, with every agent's position tracked onchain and publicly verifiable. Goals, round-ups, projections, receipts for everything.",
   "category": "Savings & Yield",
   "tags": ["savings", "rwa", "yield", "usdc", "pharos", "real-world-assets", "treasuries"],
   "network": {
@@ -34,7 +34,7 @@
     { "name": "project_savings", "description": "Project future savings from a monthly amount, with yield", "input": "a monthly amount and a number of months" },
     { "name": "agent_park", "description": "Agent Mode: park an AI agent's idle testnet aUSD into the RWA-yield mirror between tasks", "input": "an agent name and an amount" },
     { "name": "agent_recall", "description": "Agent Mode: recall a parked balance plus earned yield on demand", "input": "an agent name and an amount or 'all'" },
-    { "name": "agent_position", "description": "Agent Mode: check any agent's on-chain position and projections", "input": "an agent name" }
+    { "name": "agent_position", "description": "Agent Mode: check any agent's onchain position and projections", "input": "an agent name" }
   ],
   "entrypoint": {
     "type": "http",

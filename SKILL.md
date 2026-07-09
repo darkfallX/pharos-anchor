@@ -1,6 +1,6 @@
 ---
 name: pharos-anchor
-description: The testnet savings account for people and AI agents on Pharos. People talk to it in plain words ("save 20", "how's my money") and it moves faucet aUSD into an on-chain vault that mirrors the Pharos pAlpha RealFi yield mix (about 12.9% net a year). Agents call it to park idle balances between tasks and recall them on demand, with every position tracked on-chain per agent id and publicly verifiable. HTTP API and MCP server included.
+description: The testnet savings account for people and AI agents on Pharos. People talk to it in plain words ("save 20", "how's my money") and it moves faucet aUSD into an onchain vault that mirrors the Pharos pAlpha RealFi yield mix (about 12.9% net a year). Agents call it to park idle balances between tasks and recall them on demand, with every position tracked onchain per agent id and publicly verifiable. HTTP API and MCP server included.
 version: 1.0.0
 license: MIT-0
 homepage: https://github.com/darkfallX/pharos-anchor
@@ -46,7 +46,7 @@ Use Anchor whenever a user wants to:
 
 Anchor runs as a small HTTP service. A hosting runtime or an assistant maps a user's sentence to one call:
 
-- `POST /ask` with `{ "text": "save 20" }` is the main entry point. Anchor reads the intent, does the action on-chain, and returns a plain-English reply plus the data and a receipt link.
+- `POST /ask` with `{ "text": "save 20" }` is the main entry point. Anchor reads the intent, does the action onchain, and returns a plain-English reply plus the data and a receipt link.
 
 It also exposes direct endpoints for a runtime that prefers structured calls:
 
@@ -73,7 +73,7 @@ Anchor's vault mirrors the real Pharos pAlpha RealFi Ecosystem Vault:
 
 ## Agent Mode: the savings account for AI agents
 
-Every agent in the Pharos economy can have idle testnet funds between tasks. Anchor gives any agent a treasury: park the idle balance into the RWA-yield mirror with one call, recall it the moment the next task needs funds. Positions live on-chain per agent id in the AnchorAgentVault contract, so anyone can verify what any agent has parked and earned. No account creation, no keys to manage, an agent is just a name.
+Every agent in the Pharos economy can have idle testnet funds between tasks. Anchor gives any agent a treasury: park the idle balance into the RWA-yield mirror with one call, recall it the moment the next task needs funds. Positions live onchain per agent id in the AnchorAgentVault contract, so anyone can verify what any agent has parked and earned. No account creation, no keys to manage, an agent is just a name.
 
 Integration is three lines:
 
@@ -87,7 +87,7 @@ Every response includes a transaction receipt link. `GET /agent/leaderboard` ran
 
 MCP-capable agents (Claude Code, OpenClaw, Codex) can skip HTTP entirely: `npm run mcp` starts a stdio server exposing `anchor_park`, `anchor_recall`, and `anchor_position` as native tools.
 
-Run `npm run demo:agents` to watch two simulated agents park, earn, and recall with real on-chain transactions.
+Run `npm run demo:agents` to watch two simulated agents park, earn, and recall with real onchain transactions.
 
 ## Setup
 
@@ -112,4 +112,4 @@ Config lives in `.env`:
 
 - This runs on testnet with a demo yield vault and an open faucet dollar, so anyone can try it without sourcing USDC. It is a stand-in for real mainnet vault integrations.
 - A production version should connect to live, audited RWA venues before making mainnet yield claims.
-- Deposits and withdrawals move testnet value and produce verifiable on-chain receipts.
+- Deposits and withdrawals move testnet value and produce verifiable onchain receipts.
